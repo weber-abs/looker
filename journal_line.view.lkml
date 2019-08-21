@@ -78,6 +78,12 @@ view: journal_line {
     sql: ${TABLE}.tax_type ;;
   }
 
+  measure: total_amount {
+    type: sum
+    sql: ${net_amount} ;;
+    value_format: "$#,##0.00"
+  }
+
   measure: count {
     type: count
     drill_fields: [detail*]

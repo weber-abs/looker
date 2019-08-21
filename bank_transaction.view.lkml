@@ -140,6 +140,12 @@ view: bank_transaction {
     drill_fields: [detail*]
   }
 
+  measure: cash_flow {
+    type: sum
+    value_format: "$#,##0.00"
+    sql: ${sub_total} ;;
+  }
+
   # ----- Sets of fields for drilling ------
   set: detail {
     fields: [
