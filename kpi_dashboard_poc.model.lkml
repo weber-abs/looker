@@ -3,13 +3,6 @@ connection: "bigquery"
 # include all the views
 include: "*.view"
 
-datagroup: kpi_dashboard_poc_default_datagroup {
-  # sql_trigger: SELECT MAX(id) FROM etl_log;;
-  max_cache_age: "1 hour"
-}
-
-persist_with: kpi_dashboard_poc_default_datagroup
-
 explore: bank_transaction {
   label: "Transactions"
 
@@ -74,6 +67,45 @@ explore: bank_transaction {
 
   }
 
+}
+
+explore: account{
+  label: "Journal Lines"
+  join: journal_line {
+    type: inner
+    sql_on: ${account.account_id} = ${journal_line.account_id} ;;
+    relationship: one_to_one
+  }
+
+  join: journal {
+    type: inner
+    sql_on: ${journal_line.journal_id} = ${journal.journal_id} ;;
+    relationship: one_to_one
+  }
+
+  join: journal_line_has_tracking_category {
+    type: inner
+    sql_on: ${journal_line.journal_line_id} = ${journal_line_has_tracking_category.journal_line_id} ;;
+    relationship: one_to_one
+  }
+
+  join: tracking_category {
+    type: inner
+    sql_on: ${journal_line_has_tracking_category.tracking_category_id} = ${tracking_category.tracking_category_id} ;;
+    relationship: one_to_one
+  }
+
+  join: tracking_category_has_option {
+    type: inner
+    sql_on: ${tracking_category.tracking_category_id} = ${tracking_category_has_option.tracking_category_id};;
+    relationship: one_to_one
+  }
+
+  join: tracking_category_option {
+    type: inner
+    sql_on: ${journal_line_has_tracking_category.tracking_category_option_id} = ${tracking_category_option.tracking_option_id}  ;;
+    relationship: one_to_one
+  }
 }
 
 explore: invoice {}

@@ -84,6 +84,24 @@ view: journal_line {
     value_format: "$#,##0.00"
   }
 
+  measure: total_revenue {
+    type: sum
+    sql: CASE WHEN account.type = 'REVENUE' THEN -1 * ${net_amount} ELSE 0 END ;;
+    value_format: "$#,##0.00"
+  }
+
+  measure: total_expense {
+    type: sum
+    sql: CASE WHEN account.type = 'EXPENSE' THEN -1 * ${net_amount} ELSE 0 END  ;;
+    value_format: "$#,##0.00"
+  }
+
+  measure: net_income {
+    type: sum
+    sql: -1 * ${net_amount} ;;
+    value_format: "$#,##0.00"
+  }
+
   measure: count {
     type: count
     drill_fields: [detail*]
