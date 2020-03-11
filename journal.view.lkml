@@ -43,6 +43,7 @@ view: journal {
       date,
       week,
       month,
+      month_name,
       quarter,
       year
     ]
@@ -67,6 +68,25 @@ view: journal {
   dimension: source_type {
     type: string
     sql: ${TABLE}.source_type ;;
+  }
+
+  dimension: reporting_period_mtd {
+    description: "This Month versus Last Month "
+    group_label: "Journal Date"
+    sql: CASE
+        WHEN EXTRACT(YEAR FROM ${journal_raw}) = EXTRACT( YEAR FROM CURRENT_DATE())
+        AND EXTRACT(MONTH FROM ${journal_raw}) = EXTRACT( MONTH FROM CURRENT_DATE())
+        AND ${journal_raw} <= CURRENT_DATE()
+        THEN 'This Month'
+
+        WHEN EXTRACT(YEAR FROM ${journal_raw}) = EXTRACT( YEAR FROM CURRENT_DATE())
+        AND EXTRACT(MONTH FROM ${journal_raw}) + 1 = EXTRACT(MONTH FROM CURRENT_DATE())
+        THEN 'Last Month'
+        ELSE NULL
+
+
+      END
+       ;;
   }
 
   measure: count {

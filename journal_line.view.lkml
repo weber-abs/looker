@@ -107,6 +107,12 @@ view: journal_line {
     value_format: "$#,##0.00"
   }
 
+  measure: total_spending {
+    type: sum
+    sql: CASE WHEN account.type = 'EXPENSE' THEN ${net_amount} ELSE 0 END  ;;
+    value_format_name: usd
+  }
+
   measure: cash_on_hand_add {
     type: sum
     sql:  CASE WHEN account.code IN ('1005', '1017') THEN ${net_amount} ELSE 0 END  ;;
