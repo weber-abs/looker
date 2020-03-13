@@ -4,7 +4,7 @@ connection: "bigquery"
 include: "*.view"
 
 explore: bank_transaction {
-  label: "Transactions"
+  group_label: "Transactions"
 
   join: account {
     type: left_outer
@@ -108,4 +108,6 @@ explore: account{
   }
 }
 
-explore: invoice {}
+explore: invoice {
+  group_label: "Transactions"
+}
